@@ -24,7 +24,7 @@ sequenceDiagram
     Iframe->>Iframe: Client completes KYC form
     Iframe->>API: Submit documents for validation
     API->>API: Validate documents
-    API->>OlaClick: POST /ms-partners/fiscal-notes/integrations/activate
+    API->>OlaClick: POST /ms-partners/fiscal-notes/kyc/update
 ```
 
 ## Create the Iframe
@@ -197,7 +197,7 @@ Compliance with this style guide is **mandatory** for integration homologation. 
 
 Once the provider successfully validates the client's documents, it must:
 
-1. Call the [`POST /ms-partners/fiscal-notes/integrations/activate`](/fiscal-notes/activate-integration) endpoint with the received `company_id`
+1. Call the [`POST /ms-partners/fiscal-notes/kyc/update`](/fiscal-notes/activate-integration) endpoint with the received `company_id`
 2. Send `status: "active"` if validation was successful
 3. Send `status: "rejected"` with a `description` if validation failed
 

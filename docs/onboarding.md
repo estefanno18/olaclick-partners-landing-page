@@ -5,74 +5,75 @@ title: Onboarding
 
 # Onboarding
 
-This guide describes the steps a partner must follow to obtain their `client_id` and `client_secret` credentials to start integrating with OlaClick.
+This guide describes how to register as an **OlaClick Partner** and obtain your credentials.
 
-## Steps
+## 1. Fill out the registration form
 
-### 1. Fill out the integration request form
-
-Contact the OlaClick integrations team and provide the following information:
+Contact the OlaClick integrations team and provide:
 
 | Field | Description | Required |
 |-------|-------------|:--------:|
-| Integration name | Name of your integration (e.g. "Nubefact Fiscal Notes") | ✅ |
+| Partner name | Name of your company (e.g. "Nubefact") | ✅ |
 | Contact name | Full name of the technical contact person | ✅ |
 | Contact email | Email for technical communication | ✅ |
 | Contact phone | Phone number for urgent matters | ✅ |
 | Description | Brief description of what your integration does | ✅ |
-| Countries | List of countries where the integration will operate (e.g. BR, MX, CO, AR) | ✅ |
+| Countries | Countries where the integration will operate (e.g. BR, MX, CO, AR) | ✅ |
+| Integrations | Modules to enable (see below) | ✅ |
 
-### 2. OlaClick reviews and creates the application
+### Available Integrations
 
-Once the form is received, the OlaClick team will:
+| Integration | Description | Scopes granted |
+|-------------|-------------|----------------|
+| `fiscal_notes` | Electronic invoicing (KYC + emission) | `fiscal_notes.integration.activate`, `fiscal_notes.invoices.create`, `orders.order.read` |
 
-1. Review the information provided
-2. Create the application in the system
-3. Generate the `client_id` and `client_secret` credentials
-4. Assign the appropriate scopes for your integration
+:::info
+More integration modules will be available in the future. Currently only `fiscal_notes` is supported.
+:::
 
-### 3. Receive your credentials
+## 2. Receive your credentials
 
-OlaClick will send you:
+Once approved, OlaClick will send you:
 
 | Credential | Description |
 |------------|-------------|
-| `client_id` | Your application's public identifier |
+| `client_id` | Your partner's unique identifier |
 | `client_secret` | Your secret key for authentication |
 
 :::danger
 Store your `client_secret` securely. It will only be shared once. If lost, a new one must be generated (which invalidates the previous one).
 :::
 
-### 4. Start integrating
+## 3. Get an access token
 
-With your credentials, you can:
+Use your credentials to obtain a Bearer token:
 
-1. [Authenticate](/authentication) — Get an access token
-2. [Create the KYC Iframe](/fiscal-notes/kyc-iframe) — Implement the document validation iframe
-3. [Activate the integration](/fiscal-notes/activate-integration) — Notify OlaClick when KYC is complete
-4. [Receive order notifications](/fiscal-notes/receive-orders) — Implement the webhook to receive order IDs
-5. [Fetch order data](/orders/get-order) — Get the full order details
-6. [Notify invoices](/fiscal-notes/notify-invoice) — Send issued invoices back to OlaClick
-7. Complete the [Homologation](/homologation) process
+```bash
+curl -X POST https://api.olaclick.app/ms-partners/oauth/token \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=client_credentials&client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET"
+```
 
-## Scopes
+```json
+{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}
+```
 
-Your application will be assigned scopes that determine which endpoints you can access. Scopes follow the format `{service}.{resource}.{action}`.
+Include this token in all requests: `Authorization: Bearer {access_token}`
 
-### Fiscal Notes
+For full details on token renewal, see [Authentication](/authentication).
 
-| Scope | Description |
-|-------|-------------|
-| `fiscal_notes.integration.activate` | Activate or reject an integration after KYC verification |
-| `fiscal_notes.invoices.create` | Send issued invoices back to OlaClick |
+## 4. Company integrations
 
-### Orders
+OlaClick creates integrations between your partner and specific companies when a client requests it. You do not create integrations yourself — OlaClick handles this internally.
 
-| Scope | Description |
-|-------|-------------|
-| `orders.order.read` | Fetch order data by ID |
+Once an integration exists for a company, the fiscal notes flow begins (KYC → emission).
 
-:::info
-While the Partners Portal application is being developed, credential delivery will be handled manually by the OlaClick integrations team. In the future, partners will be able to self-register and manage their credentials through the portal.
-:::
+## Next steps
+
+Proceed to the integration module documentation:
+
+- **Fiscal Notes** → [Fiscal Notes Onboarding](/fiscal-notes/onboarding)

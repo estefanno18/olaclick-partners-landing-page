@@ -9,6 +9,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Fiscal Notes',
       items: [
+        'fiscal-notes/onboarding',
         'fiscal-notes/kyc-iframe',
         'fiscal-notes/activate-integration',
         'fiscal-notes/receive-orders',

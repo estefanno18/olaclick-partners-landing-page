@@ -60,7 +60,7 @@ All errors follow the same format:
 
 ## Rate Limiting
 
-The API has a limit of **100 requests per minute** per provider. If you exceed this limit, you will receive a `429` error:
+The API has a limit of **100 requests per minute** per partner. If you exceed this limit, you will receive a `429` error:
 
 ```json
 {

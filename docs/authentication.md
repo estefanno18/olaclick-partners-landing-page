@@ -25,7 +25,7 @@ grant_type=client_credentials&client_id=your_client_id&client_secret=your_client
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `grant_type` | `string` | ✅ | Always `client_credentials` |
-| `client_id` | `string` | ✅ | Your application's unique identifier |
+| `client_id` | `string` | ✅ | Your partner's unique identifier |
 | `client_secret` | `string` | ✅ | Secret key for authentication |
 
 ### Response — 200 OK
@@ -109,11 +109,11 @@ async function getToken() {
 
 ## Credentials
 
-To obtain your provider credentials, contact the OlaClick integrations team. You will receive:
+To obtain your partner credentials, contact the OlaClick integrations team. You will receive:
 
 | Field | Description |
 |-------|-------------|
-| `client_id` | Your application's unique identifier |
+| `client_id` | Your partner's unique identifier |
 | `client_secret` | Secret key for authentication |
 
 :::danger

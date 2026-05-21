@@ -44,7 +44,7 @@ The provider must demonstrate that it can:
 
 The provider must demonstrate that it can:
 
-- Call the [`POST /ms-partners/fiscal-notes/integrations/activate`](/fiscal-notes/activate-integration) endpoint with a valid `company_id`
+- Call the [`POST /ms-partners/fiscal-notes/kyc/update`](/fiscal-notes/activate-integration) endpoint with a valid `company_id`
 - Send `status: "active"` when KYC validation is successful
 - Send `status: "rejected"` with a `description` when validation fails
 - Correctly handle errors (`COMPANY_DOES_NOT_EXIST`, `COMPANY_ALREADY_INTEGRATED`, `COMPANY_NOT_ELIGIBLE`, etc.)

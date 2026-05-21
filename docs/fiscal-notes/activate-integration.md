@@ -1,16 +1,16 @@
 ---
 sidebar_position: 3
-title: Activate Integration
+title: Update KYC Status
 ---
 
-# Activate Integration
+# Update KYC Status
 
-Once the provider has completed the KYC validation for a client, it must notify OlaClick that the integration is active for that company.
+Once the partner has completed the KYC validation for a company, it must notify OlaClick to update the KYC state. OlaClick creates the KYC record as `pending` when the company accesses the iframe. Your role is to update it to `active` (approved) or `rejected`.
 
 ## Endpoint
 
 ```http
-POST https://api.olaclick.app/ms-partners/fiscal-notes/integrations/activate
+POST https://api.olaclick.app/ms-partners/fiscal-notes/kyc/update
 Authorization: Bearer {access_token}
 Content-Type: application/json
 ```
@@ -124,7 +124,7 @@ This error is returned when the company exists but does not meet the requirement
 ## Example with cURL
 
 ```bash
-curl -X POST https://api.olaclick.app/ms-partners/fiscal-notes/integrations/activate \
+curl -X POST https://api.olaclick.app/ms-partners/fiscal-notes/kyc/update \
   -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIs..." \
   -H "Content-Type: application/json" \
   -d '{
