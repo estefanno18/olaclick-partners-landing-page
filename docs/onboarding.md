@@ -1,9 +1,10 @@
 ---
-sidebar_position: 2
-title: Onboarding
+sidebar_position: 1
+slug: /
+title: Get Started
 ---
 
-# Onboarding
+# Get Started
 
 This guide describes how to register as an **OlaClick Partner** and obtain your credentials.
 
@@ -16,10 +17,7 @@ sequenceDiagram
     OlaClick->>OlaClick: Review and create partner
     OlaClick-->>Partner: Deliver client_id + client_secret
 
-    Partner->>OlaClick: POST /ms-partners/oauth/token
-    OlaClick-->>Partner: access_token (valid 1 hour)
-
-    Note over Partner,OlaClick: Partner ready. OlaClick creates integrations when clients request it.
+    Note over Partner,OlaClick: OlaClick creates integrations when clients request it.
 ```
 
 ## 1. Fill out the registration form
@@ -34,9 +32,9 @@ Contact the OlaClick integrations team and provide:
 | Contact phone | Phone number for urgent matters | ✅ |
 | Description | Brief description of what your integration does | ✅ |
 | Countries | Countries where the integration will operate (e.g. BR, MX, CO, AR) | ✅ |
-| Integrations | Modules to enable (see below) | ✅ |
+| Modules | Modules to enable (see below) | ✅ |
 
-### Available Integrations
+### Available Modules
 
 | Integration | Description | Scopes granted |
 |-------------|-------------|----------------|
@@ -81,14 +79,18 @@ Include this token in all requests: `Authorization: Bearer {access_token}`
 
 For full details on token renewal, see [Authentication](/authentication).
 
-## 4. Company integrations
+:::info
+OlaClick creates integrations between your partner and specific companies when a company requests it. You do not create integrations yourself — OlaClick handles this internally.
+:::
 
-OlaClick creates integrations between your partner and specific companies when a client requests it. You do not create integrations yourself — OlaClick handles this internally.
+## 4. Complete homologation
 
-Once an integration exists for a company, the fiscal notes flow begins (KYC → emission).
+Before going to production, you must complete the homologation process for each module you selected. Each module has an independent homologation — you can start using modules that are already approved while others are still in review.
+
+- **Fiscal Notes** → [Homologation](/modules/fiscal-notes/homologation)
 
 ## Next steps
 
 Proceed to the integration module documentation:
 
-- **Fiscal Notes** → [Fiscal Notes Onboarding](/fiscal-notes/onboarding)
+- **Fiscal Notes** → [Fiscal Notes Onboarding](/modules/fiscal-notes/onboarding)

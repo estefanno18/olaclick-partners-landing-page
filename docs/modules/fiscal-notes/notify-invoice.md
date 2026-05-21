@@ -17,7 +17,7 @@ Content-Type: application/json
 
 **Scope required:** `fiscal_notes.invoices.create`
 
-The `invoice_id` is the same one you received in the [order webhook](/fiscal-notes/receive-orders).
+The `invoice_id` is the same one you received in the [order webhook](/modules/fiscal-notes/receive-orders).
 
 ## Request Body — Invoice Issued
 

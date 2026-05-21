@@ -13,7 +13,7 @@ The homologation evaluates three main aspects:
 
 ### 1. KYC Iframe — Style Compliance
 
-The iframe must follow the [Style Guide](/fiscal-notes/kyc-iframe#style-guide) defined in the iframe documentation. The following will be verified:
+The iframe must follow the [Style Guide](/modules/fiscal-notes/kyc-iframe#style-guide) defined in the iframe documentation. The following will be verified:
 
 | Criteria | Description | Required |
 |----------|-------------|:--------:|
@@ -44,7 +44,7 @@ The provider must demonstrate that it can:
 
 The provider must demonstrate that it can:
 
-- Call the [`POST /ms-partners/fiscal-notes/kyc/update`](/fiscal-notes/activate-integration) endpoint with a valid `company_id`
+- Call the [`POST /ms-partners/fiscal-notes/kyc/update`](/modules/fiscal-notes/activate-integration) endpoint with a valid `company_id`
 - Send `status: "active"` when KYC validation is successful
 - Send `status: "rejected"` with a `description` when validation fails
 - Correctly handle errors (`COMPANY_DOES_NOT_EXIST`, `COMPANY_ALREADY_INTEGRATED`, `COMPANY_NOT_ELIGIBLE`, etc.)
@@ -57,9 +57,9 @@ The provider must demonstrate that it can:
 
 - Receive order notifications on their webhook endpoint and respond with `200 OK`
 - Verify the `X-OlaClick-Signature` header
-- Fetch the full order data using [`GET /ms-partners/orders/{order_id}`](/orders/get-order)
-- Call [`POST /ms-partners/fiscal-notes/invoices/{id}`](/fiscal-notes/notify-invoice) with `status: "issued"` when the invoice is emitted
-- Call [`POST /ms-partners/fiscal-notes/invoices/{id}`](/fiscal-notes/notify-invoice) with `status: "error"` when emission fails
+- Fetch the full order data using [`GET /ms-partners/orders/{order_id}`](/modules/orders/get-order)
+- Call [`POST /ms-partners/fiscal-notes/invoices/{id}`](/modules/fiscal-notes/notify-invoice) with `status: "issued"` when the invoice is emitted
+- Call [`POST /ms-partners/fiscal-notes/invoices/{id}`](/modules/fiscal-notes/notify-invoice) with `status: "error"` when emission fails
 - Handle idempotency (same `invoice_id` received twice should not produce duplicate invoices)
 
 **Required test:** Receive a test order notification, fetch the order, emit a test invoice, and notify OlaClick successfully in the staging environment.

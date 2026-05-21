@@ -5,7 +5,7 @@ title: Onboarding
 
 # Fiscal Notes — Onboarding
 
-This guide describes the integration flow for the **Fiscal Notes** module. Before starting, make sure you have completed the [Partner Onboarding](/onboarding) and have a valid access token.
+This guide describes the integration flow for the **Fiscal Notes** module. Before starting, make sure you have completed the [Partner registration](/) and have a valid access token.
 
 ## Flow Overview
 
@@ -57,37 +57,37 @@ You do not create integrations or KYC records. OlaClick creates them when the cl
 
 OlaClick embeds your iframe when a company needs to complete document validation. The iframe receives `company_id` and `country` as query parameters. At this point, OlaClick has already created the KYC record as `pending`.
 
-→ See [KYC Iframe](/fiscal-notes/kyc-iframe) for full implementation details and style guide.
+→ See [KYC Iframe](/modules/fiscal-notes/kyc-iframe) for full implementation details and style guide.
 
 ### 2. Update KYC status
 
 Once the company's documents are validated (or rejected), update the KYC status in OlaClick. This determines whether the emission flow is enabled for that company.
 
-→ See [Activate Integration](/fiscal-notes/activate-integration)
+→ See [Activate Integration](/modules/fiscal-notes/activate-integration)
 
 ### 3. Receive order notifications
 
 Once KYC is approved, OlaClick sends a webhook to your registered URL when an order is ready for invoicing. The webhook contains the `order_id` and metadata.
 
-→ See [Receive Orders](/fiscal-notes/receive-orders)
+→ See [Receive Orders](/modules/fiscal-notes/receive-orders)
 
 ### 4. Fetch order data
 
 Use the order ID from the webhook to fetch the full order details (products, payments, totals).
 
-→ See [Get Order](/orders/get-order)
+→ See [Get Order](/modules/orders/get-order)
 
 ### 5. Notify invoice issued
 
 After emitting the invoice, send the result back to OlaClick.
 
-→ See [Notify Invoice](/fiscal-notes/notify-invoice)
+→ See [Notify Invoice](/modules/fiscal-notes/notify-invoice)
 
 ### 6. Homologation
 
 Complete the homologation process to get production credentials.
 
-→ See [Homologation](/homologation)
+→ See [Homologation](/modules/fiscal-notes/homologation)
 
 ## Required Scopes
 

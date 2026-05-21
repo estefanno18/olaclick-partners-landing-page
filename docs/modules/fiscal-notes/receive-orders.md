@@ -12,9 +12,9 @@ Once an integration is active, OlaClick sends order notifications to the provide
 1. A client's order is completed in OlaClick
 2. OlaClick sends the order ID and metadata to your webhook URL
 3. You respond with `200 OK` confirming receipt
-4. You fetch the full order data using the [Orders API](/orders/get-order)
+4. You fetch the full order data using the [Orders API](/modules/orders/get-order)
 5. You process the order and emit the invoice
-6. You notify OlaClick when the invoice is issued (see [Notify Invoice](/fiscal-notes/notify-invoice))
+6. You notify OlaClick when the invoice is issued (see [Notify Invoice](/modules/fiscal-notes/notify-invoice))
 
 ## Your Webhook Endpoint
 
@@ -50,14 +50,14 @@ The body contains the order reference and metadata needed to fetch the full orde
 |-------|------|-------------|
 | `event` | string | Always `order.invoice_requested` |
 | `invoice_id` | UUID | Unique ID for this invoice request (use for idempotency) |
-| `order_id` | UUID | The order ID — use this to fetch the full order via the [Orders API](/orders/get-order) |
+| `order_id` | UUID | The order ID — use this to fetch the full order via the [Orders API](/modules/orders/get-order) |
 | `company_id` | UUID | The OlaClick company |
 | `country_code` | string | ISO 3166-1 alpha-2 |
 | `currency` | string | ISO 4217 (BRL, MXN, COP, ARS) |
 | `timezone` | string | IANA timezone of the company |
 
 :::info
-The webhook only sends the order reference. To get the full order data (products, payments, totals, etc.), use the [`GET /ms-partners/orders/:order_id`](/orders/get-order) endpoint.
+The webhook only sends the order reference. To get the full order data (products, payments, totals, etc.), use the [`GET /ms-partners/orders/:order_id`](/modules/orders/get-order) endpoint.
 :::
 
 ## Expected Response

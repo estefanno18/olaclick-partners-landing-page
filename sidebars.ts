@@ -2,28 +2,34 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 
 const sidebars: SidebarsConfig = {
   docsSidebar: [
-    'intro',
     'onboarding',
+    'intro',
     'authentication',
     {
       type: 'category',
-      label: 'Fiscal Notes',
+      label: 'Modules',
       items: [
-        'fiscal-notes/onboarding',
-        'fiscal-notes/kyc-iframe',
-        'fiscal-notes/activate-integration',
-        'fiscal-notes/receive-orders',
-        'fiscal-notes/notify-invoice',
+        {
+          type: 'category',
+          label: 'Fiscal Notes',
+          items: [
+            'modules/fiscal-notes/onboarding',
+            'modules/fiscal-notes/kyc-iframe',
+            'modules/fiscal-notes/activate-integration',
+            'modules/fiscal-notes/receive-orders',
+            'modules/fiscal-notes/notify-invoice',
+            'modules/fiscal-notes/homologation',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Orders',
+          items: [
+            'modules/orders/get-order',
+          ],
+        },
       ],
     },
-    {
-      type: 'category',
-      label: 'Orders',
-      items: [
-        'orders/get-order',
-      ],
-    },
-    'homologation',
     'error-codes',
   ],
 };

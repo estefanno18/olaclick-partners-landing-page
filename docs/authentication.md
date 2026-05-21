@@ -7,6 +7,13 @@ title: Authentication
 
 All OlaClick API endpoints require authentication via a Bearer token. The authentication mechanism follows the **OAuth 2.0 Client Credentials Grant** standard ([RFC 6749 §4.4](https://datatracker.ietf.org/doc/html/rfc6749#section-4.4)).
 
+## Base URL
+
+| Environment | URL |
+|-------------|-----|
+| **Production** | `https://api.olaclick.app/ms-partners` |
+| **Staging** | `https://api.olaclick-stg.click/ms-partners` |
+
 ## Get Token
 
 ### Request

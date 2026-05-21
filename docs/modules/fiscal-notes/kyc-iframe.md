@@ -12,7 +12,7 @@ The KYC (Know Your Customer) capture module allows providers to collect and vali
 1. OlaClick embeds the provider's iframe in its interface
 2. OlaClick passes `company_id` and `country` as query parameters
 3. The client completes the document validation form inside the iframe
-4. Once validated, the provider calls the [Activate Integration](/fiscal-notes/activate-integration) endpoint to notify OlaClick
+4. Once validated, the provider calls the [Activate Integration](/modules/fiscal-notes/activate-integration) endpoint to notify OlaClick
 
 ```mermaid
 sequenceDiagram
@@ -197,7 +197,7 @@ Compliance with this style guide is **mandatory** for integration homologation. 
 
 Once the provider successfully validates the client's documents, it must:
 
-1. Call the [`POST /ms-partners/fiscal-notes/kyc/update`](/fiscal-notes/activate-integration) endpoint with the received `company_id`
+1. Call the [`POST /ms-partners/fiscal-notes/kyc/update`](/modules/fiscal-notes/activate-integration) endpoint with the received `company_id`
 2. Send `status: "active"` if validation was successful
 3. Send `status: "rejected"` with a `description` if validation failed
 

@@ -82,11 +82,11 @@ const config: Config = {
             },
             {
               label: 'Fiscal Notes',
-              to: '/fiscal-notes/kyc-iframe',
+              to: '/modules/fiscal-notes/onboarding',
             },
             {
               label: 'Orders',
-              to: '/orders/get-order',
+              to: '/modules/orders/get-order',
             },
           ],
         },
