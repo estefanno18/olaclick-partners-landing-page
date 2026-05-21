@@ -1,0 +1,63 @@
+/**
+ * OlaClick Partners Portal - Custom Styles
+ * Based on fe-panels color palette
+ */
+
+:root {
+  --ifm-color-primary: #006FFF;
+  --ifm-color-primary-dark: #0064E6;
+  --ifm-color-primary-darker: #005ED9;
+  --ifm-color-primary-darkest: #004DB3;
+  --ifm-color-primary-light: #1A7DFF;
+  --ifm-color-primary-lighter: #268AFF;
+  --ifm-color-primary-lightest: #4D9FFF;
+  --ifm-code-font-size: 95%;
+  --ifm-font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 111, 255, 0.1);
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #4D9FFF;
+  --ifm-color-primary-dark: #2B8AFF;
+  --ifm-color-primary-darker: #1A7DFF;
+  --ifm-color-primary-darkest: #006FFF;
+  --ifm-color-primary-light: #6FB2FF;
+  --ifm-color-primary-lighter: #80BBFF;
+  --ifm-color-primary-lightest: #B3D9FF;
+  --docusaurus-highlighted-code-line-bg: rgba(77, 159, 255, 0.15);
+}
+
+/* Navbar styling */
+.navbar {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* Footer styling */
+.footer--dark {
+  background-color: #003E8F;
+}
+
+/* Code blocks */
+.prism-code {
+  border-radius: 8px;
+}
+
+/* Admonitions */
+.alert--info {
+  --ifm-alert-background-color: rgba(0, 111, 255, 0.08);
+  --ifm-alert-border-color: #006FFF;
+}
+
+/* Tables */
+table {
+  display: table;
+  width: 100%;
+}
+
+table th {
+  background-color: rgba(0, 111, 255, 0.05);
+}
+
+[data-theme='dark'] table th {
+  background-color: rgba(77, 159, 255, 0.1);
+}
