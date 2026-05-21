@@ -7,6 +7,21 @@ title: Onboarding
 
 This guide describes how to register as an **OlaClick Partner** and obtain your credentials.
 
+```mermaid
+sequenceDiagram
+    participant Partner as Partner
+    participant OlaClick as OlaClick Team
+
+    Partner->>OlaClick: Fill out registration form
+    OlaClick->>OlaClick: Review and create partner
+    OlaClick-->>Partner: Deliver client_id + client_secret
+
+    Partner->>OlaClick: POST /ms-partners/oauth/token
+    OlaClick-->>Partner: access_token (valid 1 hour)
+
+    Note over Partner,OlaClick: Partner ready. OlaClick creates integrations when clients request it.
+```
+
 ## 1. Fill out the registration form
 
 Contact the OlaClick integrations team and provide:
