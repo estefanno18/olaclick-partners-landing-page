@@ -11,15 +11,15 @@ All OlaClick API endpoints require authentication via a Bearer token. The authen
 
 | Environment | URL |
 |-------------|-----|
-| **Production** | `https://api.olaclick.app/ms-partners` |
-| **Staging** | `https://api.olaclick-stg.click/ms-partners` |
+| **Production** | `https://api.olaclick.app/ms-olaclickhub/connectors/v1` |
+| **Staging** | `https://api.olaclick-stg.click/ms-olaclickhub/connectors/v1` |
 
 ## Get Token
 
 ### Request
 
 ```http
-POST https://api.olaclick.app/ms-partners/oauth/token
+POST https://api.olaclick.app/ms-olaclickhub/connectors/v1/oauth/token
 Content-Type: application/x-www-form-urlencoded
 ```
 
@@ -65,7 +65,7 @@ grant_type=client_credentials&client_id=your_client_id&client_secret=your_client
 Include the token in the `Authorization` header of all requests:
 
 ```http
-GET https://api.olaclick.app/ms-partners/orders/{order_id}
+GET https://api.olaclick.app/ms-olaclickhub/connectors/v1/orders/{order_id}
 Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
@@ -73,12 +73,12 @@ Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
 
 ```bash
 # Get token
-curl -X POST https://api.olaclick.app/ms-partners/oauth/token \
+curl -X POST https://api.olaclick.app/ms-olaclickhub/connectors/v1/oauth/token \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=client_credentials&client_id=your_client_id&client_secret=your_client_secret"
 
 # Use token in a request
-curl -X GET https://api.olaclick.app/ms-partners/orders/f47ac10b-58cc-4372-a567-0e02b2c3d479 \
+curl -X GET https://api.olaclick.app/ms-olaclickhub/connectors/v1/orders/f47ac10b-58cc-4372-a567-0e02b2c3d479 \
   -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIs..."
 ```
 
@@ -101,7 +101,7 @@ async function getToken() {
     return token;
   }
 
-  const response = await fetch('https://api.olaclick.app/ms-partners/oauth/token', {
+  const response = await fetch('https://api.olaclick.app/ms-olaclickhub/connectors/v1/oauth/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: 'grant_type=client_credentials&client_id=YOUR_ID&client_secret=YOUR_SECRET'

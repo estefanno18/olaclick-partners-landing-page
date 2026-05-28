@@ -15,17 +15,29 @@ const sidebars: SidebarsConfig = {
           items: [
             'modules/fiscal-notes/onboarding',
             'modules/fiscal-notes/kyc-iframe',
-            'modules/fiscal-notes/activate-integration',
-            'modules/fiscal-notes/receive-orders',
-            'modules/fiscal-notes/notify-invoice',
             'modules/fiscal-notes/homologation',
+          ],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'API Reference',
+      items: [
+        {
+          type: 'category',
+          label: 'Fiscal Notes',
+          items: [
+            'api-reference/fiscal-notes/update-kyc-status',
+            'api-reference/fiscal-notes/receive-orders',
+            'api-reference/fiscal-notes/notify-invoice',
           ],
         },
         {
           type: 'category',
           label: 'Orders',
           items: [
-            'modules/orders/get-order',
+            'api-reference/orders/get-order',
           ],
         },
       ],

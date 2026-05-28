@@ -10,7 +10,7 @@ Fetch the full order data by ID. Use this endpoint after receiving an order noti
 ## Endpoint
 
 ```http
-GET https://api.olaclick.app/ms-partners/orders/{order_id}
+GET https://api.olaclick.app/ms-olaclickhub/connectors/v1/orders/{order_id}
 Authorization: Bearer {access_token}
 ```
 
@@ -412,6 +412,6 @@ This error is returned when the order exists but does not belong to a company in
 ## Example with cURL
 
 ```bash
-curl -X GET https://api.olaclick.app/ms-partners/orders/f47ac10b-58cc-4372-a567-0e02b2c3d479 \
+curl -X GET https://api.olaclick.app/ms-olaclickhub/connectors/v1/orders/f47ac10b-58cc-4372-a567-0e02b2c3d479 \
   -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIs..."
 ```

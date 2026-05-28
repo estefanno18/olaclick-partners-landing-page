@@ -85,8 +85,8 @@ const config: Config = {
               to: '/modules/fiscal-notes/onboarding',
             },
             {
-              label: 'Orders',
-              to: '/modules/orders/get-order',
+              label: 'API Reference',
+              to: '/api-reference/fiscal-notes/update-kyc-status',
             },
           ],
         },

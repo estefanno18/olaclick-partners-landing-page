@@ -62,7 +62,7 @@ Store your `client_secret` securely. It will only be shared once. If lost, a new
 Use your credentials to obtain a Bearer token:
 
 ```bash
-curl -X POST https://api.olaclick.app/ms-partners/oauth/token \
+curl -X POST https://api.olaclick.app/ms-olaclickhub/connectors/v1/oauth/token \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=client_credentials&client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET"
 ```

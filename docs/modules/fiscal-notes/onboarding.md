@@ -23,18 +23,18 @@ sequenceDiagram
     Company->>Partner: Completes KYC form in iframe
     Partner->>Partner: Validates documents
 
-    Partner->>OlaClick: POST /fiscal-notes/kyc/update (status: active)
+    Partner->>OlaClick: POST /ms-olaclickhub/connectors/v1/fiscal-notes/kyc/update (status: active)
     OlaClick-->>Partner: 200 OK (KYC approved)
 
     Note over Partner,OlaClick: Emission flow enabled for this company
 
     OlaClick->>Partner: POST {webhook_url} (order_id + metadata)
-    Partner->>OlaClick: GET /ms-partners/orders/{order_id}
+    Partner->>OlaClick: GET /ms-olaclickhub/connectors/v1/orders/{order_id}
     OlaClick-->>Partner: Full order data
 
     Partner->>Partner: Issue invoice
 
-    Partner->>OlaClick: POST /ms-partners/fiscal-notes/invoices/{id}
+    Partner->>OlaClick: POST /ms-olaclickhub/connectors/v1/fiscal-notes/invoices/{id}
     OlaClick-->>Partner: 200 OK
 ```
 
@@ -63,25 +63,25 @@ OlaClick embeds your iframe when a company needs to complete document validation
 
 Once the company's documents are validated (or rejected), update the KYC status in OlaClick. This determines whether the emission flow is enabled for that company.
 
-→ See [Activate Integration](/modules/fiscal-notes/activate-integration)
+→ See [Update KYC Status](/api-reference/fiscal-notes/update-kyc-status)
 
 ### 3. Receive order notifications
 
 Once KYC is approved, OlaClick sends a webhook to your registered URL when an order is ready for invoicing. The webhook contains the `order_id` and metadata.
 
-→ See [Receive Orders](/modules/fiscal-notes/receive-orders)
+→ See [Receive Orders](/api-reference/fiscal-notes/receive-orders)
 
 ### 4. Fetch order data
 
 Use the order ID from the webhook to fetch the full order details (products, payments, totals).
 
-→ See [Get Order](/modules/orders/get-order)
+→ See [Get Order](/api-reference/orders/get-order)
 
 ### 5. Notify invoice issued
 
 After emitting the invoice, send the result back to OlaClick.
 
-→ See [Notify Invoice](/modules/fiscal-notes/notify-invoice)
+→ See [Notify Invoice](/api-reference/fiscal-notes/notify-invoice)
 
 ### 6. Homologation
 
