@@ -5,12 +5,12 @@ title: Update KYC Status
 
 # Update KYC Status
 
-Once the partner has completed the KYC validation for a company, it must notify OlaClick to update the KYC state. OlaClick creates the KYC record as `pending` when the company accesses the iframe. Your role is to update it to `active` (approved) or `rejected`.
+Once the connector has completed the KYC validation for a company, it must notify OlaClick to update the KYC state. OlaClick creates the KYC record as `pending` when the company accesses the iframe. Your role is to update it to `active` (approved) or `rejected`.
 
 ## Endpoint
 
 ```http
-POST https://api.olaclick.app/ms-olaclickhub/connectors/v1/fiscal-notes/kyc/update
+POST https://public-api.olaclick.app/ms-olaclickhub/v1/fiscal-notes/kyc/update
 Authorization: Bearer {access_token}
 Content-Type: application/json
 ```
@@ -124,7 +124,7 @@ This error is returned when the company exists but does not meet the requirement
 ## Example with cURL
 
 ```bash
-curl -X POST https://api.olaclick.app/ms-olaclickhub/connectors/v1/fiscal-notes/kyc/update \
+curl -X POST https://public-api.olaclick.app/ms-olaclickhub/v1/fiscal-notes/kyc/update \
   -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIs..." \
   -H "Content-Type: application/json" \
   -d '{

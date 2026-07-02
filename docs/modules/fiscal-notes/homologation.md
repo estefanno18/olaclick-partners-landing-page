@@ -13,7 +13,7 @@ The homologation evaluates three main aspects:
 
 ### 1. KYC Iframe — Style Compliance
 
-The iframe must follow the [Style Guide](/modules/fiscal-notes/kyc-iframe#style-guide) defined in the iframe documentation. The following will be verified:
+The iframe must follow the [Style Guide](/modules/fiscal-notes/kyc/iframe#style-guide) defined in the iframe documentation. The following will be verified:
 
 | Criteria | Description | Required |
 |----------|-------------|:--------:|
@@ -34,7 +34,7 @@ We recommend sending screenshots or a staging link of the iframe before scheduli
 
 The provider must demonstrate that it can:
 
-- Obtain an `access_token` using the [`POST /ms-olaclickhub/connectors/v1/oauth/token`](/authentication) endpoint with its credentials (`client_id` and `client_secret`)
+- Obtain an `access_token` using the [`POST /ms-olaclickhub/v1/oauth/token`](/authentication) endpoint with its credentials (`client_id` and `client_secret`)
 - Correctly handle token expiration and renew it before it expires
 - Include the token in the `Authorization: Bearer {token}` header in all requests
 
@@ -42,9 +42,9 @@ The provider must demonstrate that it can:
 
 ### 3. KYC Status Update
 
-The partner must demonstrate that it can:
+The connector must demonstrate that it can:
 
-- Call the [`POST /ms-olaclickhub/connectors/v1/fiscal-notes/kyc/update`](/api-reference/fiscal-notes/update-kyc-status) endpoint with a valid `company_id`
+- Call the [`POST /ms-olaclickhub/v1/fiscal-notes/kyc/update`](/modules/fiscal-notes/kyc/update-status) endpoint with a valid `company_id`
 - Send `status: "active"` when KYC validation is successful
 - Send `status: "rejected"` with a `description` when validation fails
 - Correctly handle errors (`COMPANY_DOES_NOT_EXIST`, `COMPANY_ALREADY_INTEGRATED`, `COMPANY_NOT_ELIGIBLE`, etc.)
@@ -57,9 +57,9 @@ The provider must demonstrate that it can:
 
 - Receive order notifications on their webhook endpoint and respond with `200 OK`
 - Verify the `X-OlaClick-Signature` header
-- Fetch the full order data using [`GET /ms-olaclickhub/connectors/v1/orders/{order_id}`](/api-reference/orders/get-order)
-- Call [`POST /ms-olaclickhub/connectors/v1/fiscal-notes/invoices/{id}`](/api-reference/fiscal-notes/notify-invoice) with `status: "issued"` when the invoice is emitted
-- Call [`POST /ms-olaclickhub/connectors/v1/fiscal-notes/invoices/{id}`](/api-reference/fiscal-notes/notify-invoice) with `status: "error"` when emission fails
+- Fetch the full order data using [`GET /ms-olaclickhub/v1/orders/{order_id}`](/modules/fiscal-notes/emission/get-order)
+- Call [`POST /ms-olaclickhub/v1/fiscal-notes/invoices/{id}`](/modules/fiscal-notes/emission/notify-invoice) with `status: "issued"` when the invoice is emitted
+- Call [`POST /ms-olaclickhub/v1/fiscal-notes/invoices/{id}`](/modules/fiscal-notes/emission/notify-invoice) with `status: "error"` when emission fails
 - Handle idempotency (same `invoice_id` received twice should not produce duplicate invoices)
 
 **Required test:** Receive a test order notification, fetch the order, emit a test invoice, and notify OlaClick successfully in the staging environment.

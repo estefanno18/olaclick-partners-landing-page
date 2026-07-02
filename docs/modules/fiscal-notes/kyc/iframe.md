@@ -12,7 +12,7 @@ The KYC (Know Your Customer) capture module allows providers to collect and vali
 1. OlaClick embeds the provider's iframe in its interface
 2. OlaClick passes `company_id` and `country` as query parameters
 3. The client completes the document validation form inside the iframe
-4. Once validated, the provider calls the [Update KYC Status](/api-reference/fiscal-notes/update-kyc-status) endpoint to notify OlaClick
+4. Once validated, the provider calls the [Update KYC Status](/modules/fiscal-notes/kyc/update-status) endpoint to notify OlaClick
 
 ```mermaid
 sequenceDiagram
@@ -24,7 +24,7 @@ sequenceDiagram
     Iframe->>Iframe: Client completes KYC form
     Iframe->>API: Submit documents for validation
     API->>API: Validate documents
-    API->>OlaClick: POST /ms-olaclickhub/connectors/v1/fiscal-notes/kyc/update
+    API->>OlaClick: POST /ms-olaclickhub/v1/fiscal-notes/kyc/update
 ```
 
 ## Create the Iframe
@@ -89,6 +89,8 @@ OlaClick embeds the iframe as follows:
   sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
 ></iframe>
 ```
+
+![KYC Iframe Example](./image.png)
 
 :::info
 The `camera` and `microphone` permissions are included to allow document capture via camera if the provider requires it.
@@ -197,7 +199,7 @@ Compliance with this style guide is **mandatory** for integration homologation. 
 
 Once the provider successfully validates the client's documents, it must:
 
-1. Call the [`POST /ms-olaclickhub/connectors/v1/fiscal-notes/kyc/update`](/api-reference/fiscal-notes/update-kyc-status) endpoint with the received `company_id`
+1. Call the [`POST /ms-olaclickhub/v1/fiscal-notes/kyc/update`](/modules/fiscal-notes/kyc/update-status) endpoint with the received `company_id`
 2. Send `status: "active"` if validation was successful
 3. Send `status: "rejected"` with a `description` if validation failed
 

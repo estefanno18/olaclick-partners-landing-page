@@ -11,10 +11,10 @@ Complete reference of error codes that the OlaClick API can return.
 
 | HTTP Code | Error Code | Description |
 |-----------|-----------|-------------|
-| 401 | `invalid_client` | The credentials (`client_id`/`client_secret`) are not valid |
-| 401 | `TOKEN_EXPIRED` | The access token has expired. Request a new one |
-| 401 | `TOKEN_INVALID` | The provided token is not valid |
-| 403 | `INSUFFICIENT_SCOPE` | The token does not have the required scope for this endpoint |
+| 401 | `invalid_client` | The credentials (`client_id`/`client_secret`) are not valid, or the `company_id` is not connected to your connector |
+| 401 | `TOKEN_EXPIRED` | The access token has expired. Request a new one via `POST /oauth/token` |
+| 401 | `TOKEN_INVALID` | The provided token is malformed or has been revoked |
+| 403 | `INSUFFICIENT_SCOPE` | The access token does not have the required scope for this endpoint |
 
 ## Validation Errors
 
@@ -60,7 +60,7 @@ All errors follow the same format:
 
 ## Rate Limiting
 
-The API has a limit of **100 requests per minute** per partner. If you exceed this limit, you will receive a `429` error:
+The API has a limit of **100 requests per minute** per connector. If you exceed this limit, you will receive a `429` error:
 
 ```json
 {

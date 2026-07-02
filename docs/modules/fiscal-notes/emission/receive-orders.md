@@ -12,9 +12,9 @@ Once an integration is active, OlaClick sends order notifications to the provide
 1. A client's order is completed in OlaClick
 2. OlaClick sends the order ID and metadata to your webhook URL
 3. You respond with `200 OK` confirming receipt
-4. You fetch the full order data using the [Orders API](/api-reference/orders/get-order)
+4. You fetch the full order data using the [Orders API](/modules/fiscal-notes/emission/get-order)
 5. You process the order and emit the invoice
-6. You notify OlaClick when the invoice is issued (see [Notify Invoice](/api-reference/fiscal-notes/notify-invoice))
+6. You notify OlaClick when the invoice is issued (see [Notify Invoice](/modules/fiscal-notes/emission/notify-invoice))
 
 ## Your Webhook Endpoint
 
@@ -34,14 +34,11 @@ The body contains the order reference and metadata needed to fetch the full orde
 
 ```json
 {
-  "event": "order.invoice_requested",
-  "invoice_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "event_type": "fiscal_notes.request",
+  "event_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
   "order_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
   "company_id": "550e8400-e29b-41d4-a716-446655440000",
-  "country_code": "BR",
-  "currency": "BRL",
-  "timezone": "America/Sao_Paulo",
-  "tax_rate": 21.00
+  "country_code": "BR"
 }
 ```
 
@@ -50,16 +47,14 @@ The body contains the order reference and metadata needed to fetch the full orde
 | Field | Type | Description |
 |-------|------|-------------|
 | `event` | string | Always `order.invoice_requested` |
+| `event_id` | UUID | Unique ID for this event |
 | `invoice_id` | UUID | Unique ID for this invoice request (use for idempotency) |
-| `order_id` | UUID | The order ID — use this to fetch the full order via the [Orders API](/api-reference/orders/get-order) |
+| `order_id` | UUID | The order ID — use this to fetch the full order via the [Orders API](/modules/fiscal-notes/emission/get-order) |
 | `company_id` | UUID | The OlaClick company |
-| `country_code` | string | ISO 3166-1 alpha-2 |
-| `tax_rate` | number | Applicable tax rate (e.g. VAT/IVA) as a percentage. Example: `21.00` means 21% |
-| `currency` | string | ISO 4217 (BRL, MXN, COP, ARS) |
-| `timezone` | string | IANA timezone of the company |
+| `country_code` | UUID | Company country code |
 
 :::info
-The webhook only sends the order reference. To get the full order data (products, payments, totals, etc.), use the [`GET /ms-olaclickhub/connectors/v1/orders/:order_id`](/api-reference/orders/get-order) endpoint.
+The webhook only sends the order reference. To get the full order data (products, totals, etc.), use the [`GET /v1/orders/:id`](/modules/fiscal-notes/emission/get-order) endpoint.
 :::
 
 ## Expected Response
@@ -141,7 +136,7 @@ app.post('/webhooks/olaclick', async (req, res) => {
   const { invoice_id, order_id, company_id, country_code } = req.body;
 
   // 2. Fetch full order data
-  const order = await fetch(`https://api.olaclick.app/ms-olaclickhub/connectors/v1/orders/${order_id}`, {
+  const order = await fetch(`https://public-api.olaclick.app/v1/orders/${order_id}`, {
     headers: { 'Authorization': `Bearer ${accessToken}` }
   }).then(r => r.json());
 

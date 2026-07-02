@@ -10,14 +10,14 @@ After you emit an invoice, notify OlaClick with the invoice data.
 ## Endpoint
 
 ```http
-POST https://api.olaclick.app/ms-olaclickhub/connectors/v1/fiscal-notes/invoices/{invoice_id}
-Authorization: Bearer {access_token}
+POST https://public-api.olaclick.app/v1/fiscal-notes/invoices/{invoice_id}
+Authorization: Bearer {api_key}
 Content-Type: application/json
 ```
 
-**Scope required:** `fiscal_notes.invoices.create`
+**Scope required:** `fiscal_notes:write`
 
-The `invoice_id` is the same one you received in the [order webhook](/api-reference/fiscal-notes/receive-orders).
+The `invoice_id` is the same one you received in the [order webhook](/modules/fiscal-notes/emission/receive-orders).
 
 ## Request Body — Invoice Issued
 
@@ -102,8 +102,8 @@ If you cannot emit the invoice, notify with `status: "error"`:
 If an invoice needs to be cancelled after being issued:
 
 ```http
-POST https://api.olaclick.app/ms-olaclickhub/connectors/v1/fiscal-notes/invoices/{invoice_id}/cancel
-Authorization: Bearer {access_token}
+POST https://public-api.olaclick.app/v1/fiscal-notes/invoices/{invoice_id}/cancel
+Authorization: Bearer {api_key}
 Content-Type: application/json
 ```
 

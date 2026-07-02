@@ -86,7 +86,7 @@ const config: Config = {
             },
             {
               label: 'API Reference',
-              to: '/api-reference/fiscal-notes/update-kyc-status',
+              to: '/modules/fiscal-notes/emission/receive-orders',
             },
           ],
         },

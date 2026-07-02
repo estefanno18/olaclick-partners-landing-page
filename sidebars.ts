@@ -7,39 +7,27 @@ const sidebars: SidebarsConfig = {
     'authentication',
     {
       type: 'category',
-      label: 'Modules',
+      label: 'Fiscal Notes',
       items: [
+        'modules/fiscal-notes/onboarding',
         {
           type: 'category',
-          label: 'Fiscal Notes',
+          label: 'KYC Phase',
           items: [
-            'modules/fiscal-notes/onboarding',
-            'modules/fiscal-notes/kyc-iframe',
-            'modules/fiscal-notes/homologation',
-          ],
-        },
-      ],
-    },
-    {
-      type: 'category',
-      label: 'API Reference',
-      items: [
-        {
-          type: 'category',
-          label: 'Fiscal Notes',
-          items: [
-            'api-reference/fiscal-notes/update-kyc-status',
-            'api-reference/fiscal-notes/receive-orders',
-            'api-reference/fiscal-notes/notify-invoice',
+            'modules/fiscal-notes/kyc/iframe',
+            'modules/fiscal-notes/kyc/update-status',
           ],
         },
         {
           type: 'category',
-          label: 'Orders',
+          label: 'Emission Phase',
           items: [
-            'api-reference/orders/get-order',
+            'modules/fiscal-notes/emission/receive-orders',
+            'modules/fiscal-notes/emission/get-order',
+            'modules/fiscal-notes/emission/notify-invoice',
           ],
         },
+        'modules/fiscal-notes/homologation',
       ],
     },
     'error-codes',
