@@ -5,31 +5,31 @@ title: KYC Iframe
 
 # KYC Iframe
 
-The KYC (Know Your Customer) capture module allows providers to collect and validate the necessary documents from OlaClick clients. This module is implemented as an **iframe** that OlaClick embeds in its platform.
+The KYC (Know Your Customer) capture module allows connectors to collect and validate the necessary fiscal documents from OlaClick companies. This module is implemented as an **iframe** that OlaClick embeds in its platform.
 
 ## How It Works
 
-1. OlaClick embeds the provider's iframe in its interface
+1. OlaClick embeds the connector's iframe in its interface
 2. OlaClick passes `company_id` and `country` as query parameters
-3. The client completes the document validation form inside the iframe
-4. Once validated, the provider calls the [Update KYC Status](/modules/fiscal-notes/kyc/update-status) endpoint to notify OlaClick
+3. The company completes the document validation form inside the iframe
+4. Once validated, the connector calls the [Update Connection Status](/modules/fiscal-notes/kyc/update-status) endpoint to notify OlaClick
 
 ```mermaid
 sequenceDiagram
     participant OlaClick as OlaClick Platform
-    participant Iframe as KYC Iframe (Provider)
-    participant API as Provider Backend
+    participant Iframe as KYC Iframe (Connector)
+    participant API as Connector Backend
 
     OlaClick->>Iframe: Embed iframe with ?company_id=xxx&country=BR
-    Iframe->>Iframe: Client completes KYC form
+    Iframe->>Iframe: Company completes KYC form
     Iframe->>API: Submit documents for validation
     API->>API: Validate documents
-    API->>OlaClick: POST /ms-olaclickhub/v1/fiscal-notes/kyc/update
+    API->>OlaClick: PATCH /v1/connections/{connection_id}
 ```
 
 ## Create the Iframe
 
-The provider must expose a public URL that accepts the following query parameters:
+The connector must expose a public URL that accepts the following query parameters:
 
 ```
 https://your-domain.com/kyc?company_id={company_id}&country={country}
@@ -40,7 +40,7 @@ https://your-domain.com/kyc?company_id={company_id}&country={country}
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `company_id` | `string (UUID)` | Unique identifier of the company in OlaClick |
-| `country` | `string (ISO 3166-1 alpha-2)` | Client's country code (e.g.: `BR`, `MX`, `CO`, `AR`) |
+| `country` | `string (ISO 3166-1 alpha-2)` | Company's country code (e.g.: `BR`, `MX`, `CO`, `AR`) |
 
 ### URL Example
 
@@ -63,10 +63,10 @@ The KYC form must capture all necessary documentation according to the country:
 
 | Country | Typical Documents |
 |---------|------------------|
-| 🇧🇷 Brazil | CNPJ, Inscrição Estadual, Certificado Digital |
-| 🇲🇽 Mexico | RFC, Constancia de Situación Fiscal, CSD |
-| 🇨🇴 Colombia | NIT, RUT, Resolución DIAN |
-| 🇦🇷 Argentina | CUIT, Certificado AFIP |
+| Brazil | CNPJ, Inscricao Estadual, Certificado Digital |
+| Mexico | RFC, Constancia de Situacion Fiscal, CSD |
+| Colombia | NIT, RUT, Resolucion DIAN |
+| Argentina | CUIT, Certificado AFIP |
 
 ### UX
 
@@ -93,7 +93,7 @@ OlaClick embeds the iframe as follows:
 ![KYC Iframe Example](./image.png)
 
 :::info
-The `camera` and `microphone` permissions are included to allow document capture via camera if the provider requires it.
+The `camera` and `microphone` permissions are included to allow document capture via camera if the connector requires it.
 :::
 
 ## Style Guide
@@ -108,13 +108,13 @@ Compliance with this style guide is **mandatory** for integration homologation. 
 
 | Role | Color | Hex | Usage |
 |------|-------|-----|-------|
-| Primary | 🔵 | `#006FFF` | Primary buttons, links, action elements |
-| Secondary | 🔵 | `#003E8F` | Highlighted text, headers, hover states |
-| Accent | 🟢 | `#01FFE3` | Badges, success indicators, highlights |
-| Error | 🔴 | `#FE5F55` | Error messages, failed validations |
-| Success | 🟢 | `#3CAF47` | Confirmations, completed states |
-| Warning | 🟠 | `#FF9800` | Alerts, pending states |
-| Info | 🔵 | `#24A4ED` | Informational messages, tooltips |
+| Primary | Blue | `#006FFF` | Primary buttons, links, action elements |
+| Secondary | Blue | `#003E8F` | Highlighted text, headers, hover states |
+| Accent | Green | `#01FFE3` | Badges, success indicators, highlights |
+| Error | Red | `#FE5F55` | Error messages, failed validations |
+| Success | Green | `#3CAF47` | Confirmations, completed states |
+| Warning | Orange | `#FF9800` | Alerts, pending states |
+| Info | Blue | `#24A4ED` | Informational messages, tooltips |
 
 ### Typography
 
@@ -191,18 +191,18 @@ Compliance with this style guide is **mandatory** for integration homologation. 
 - Do not use colors outside the defined palette
 - Maintain minimum WCAG AA contrast (4.5:1 for text)
 - The iframe background must be white (`#FFFFFF`) or light gray (`#F5F5F5`)
-- Do not include the provider's own logos prominently
+- Do not include the connector's own logos prominently
 - Error messages must use the color `#FE5F55`
 - Success states must use the color `#3CAF47`
 
 ## After KYC
 
-Once the provider successfully validates the client's documents, it must:
+Once the connector successfully validates the company's documents, it must:
 
-1. Call the [`POST /ms-olaclickhub/v1/fiscal-notes/kyc/update`](/modules/fiscal-notes/kyc/update-status) endpoint with the received `company_id`
+1. Call the [`PATCH /v1/connections/{connection_id}`](/modules/fiscal-notes/kyc/update-status) endpoint
 2. Send `status: "active"` if validation was successful
-3. Send `status: "rejected"` with a `description` if validation failed
+3. Send `status: "rejected"` with a `reason` if validation failed
 
 :::warning
-The provider is responsible for storing KYC documents. OlaClick does not store the client's fiscal documents.
+The connector is responsible for storing KYC documents. OlaClick does not store the company's fiscal documents.
 :::

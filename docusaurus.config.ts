@@ -3,8 +3,8 @@ import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'OlaClick Partners',
-  tagline: 'Integration documentation for fiscal notes providers',
+  title: 'OlaClick Connectors',
+  tagline: 'Integration documentation for OlaClick connectors',
   favicon: 'img/favicon.ico',
 
   future: {
@@ -52,7 +52,7 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'OlaClick Partners',
+      title: 'OlaClick Connectors',
       logo: {
         alt: 'OlaClick Logo',
         src: 'img/logo.svg',
@@ -77,16 +77,12 @@ const config: Config = {
               to: '/',
             },
             {
-              label: 'Authentication',
-              to: '/authentication',
-            },
-            {
               label: 'Fiscal Notes',
               to: '/modules/fiscal-notes/onboarding',
             },
             {
               label: 'API Reference',
-              to: '/modules/fiscal-notes/emission/receive-orders',
+              href: 'https://developers.olaclick.app/docs/api',
             },
           ],
         },

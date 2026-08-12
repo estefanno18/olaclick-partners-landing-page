@@ -4,7 +4,6 @@ const sidebars: SidebarsConfig = {
   docsSidebar: [
     'onboarding',
     'intro',
-    'authentication',
     {
       type: 'category',
       label: 'Fiscal Notes',

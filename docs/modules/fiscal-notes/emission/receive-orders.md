@@ -5,11 +5,11 @@ title: Receive Orders
 
 # Receive Orders
 
-Once an integration is active, OlaClick sends order notifications to the provider's webhook URL for invoice emission.
+Once a connection is active, OlaClick sends order notifications to the connector's webhook URL for invoice emission.
 
 ## How It Works
 
-1. A client's order is completed in OlaClick
+1. A company's order is completed in OlaClick
 2. OlaClick sends the order ID and metadata to your webhook URL
 3. You respond with `200 OK` confirming receipt
 4. You fetch the full order data using the [Orders API](/modules/fiscal-notes/emission/get-order)
@@ -18,7 +18,7 @@ Once an integration is active, OlaClick sends order notifications to the provide
 
 ## Your Webhook Endpoint
 
-OlaClick will make a POST request to the webhook URL you provided during integration creation.
+OlaClick makes a POST request to the webhook URL registered for this company when the connection was created.
 
 ```http
 POST {your_webhook_url}
@@ -28,6 +28,8 @@ X-OlaClick-Request-Id: {uuid}
 X-OlaClick-Timestamp: {iso8601}
 ```
 
+> **Related:** [Webhooks](https://developers.olaclick.app/docs/webhooks) — General webhooks documentation in the Public API
+
 ## Request Body
 
 The body contains the order reference and metadata needed to fetch the full order:
@@ -36,6 +38,7 @@ The body contains the order reference and metadata needed to fetch the full orde
 {
   "event_type": "fiscal_notes.request",
   "event_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "invoice_id": "b23dc10b-77aa-4372-a567-0e02b2c3d999",
   "order_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
   "company_id": "550e8400-e29b-41d4-a716-446655440000",
   "country_code": "BR"
@@ -46,15 +49,15 @@ The body contains the order reference and metadata needed to fetch the full orde
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `event` | string | Always `order.invoice_requested` |
-| `event_id` | UUID | Unique ID for this event |
-| `invoice_id` | UUID | Unique ID for this invoice request (use for idempotency) |
-| `order_id` | UUID | The order ID — use this to fetch the full order via the [Orders API](/modules/fiscal-notes/emission/get-order) |
+| `event_type` | string | Always `fiscal_notes.request` |
+| `event_id` | UUID | Unique ID for this event delivery |
+| `invoice_id` | UUID | Unique ID for this invoice request (use for idempotency and when [notifying the result](/modules/fiscal-notes/emission/notify-invoice)) |
+| `order_id` | UUID | The order ID — use this to fetch the full order via [`GET /v1/orders/:id`](https://developers.olaclick.app/docs/api/orders-controller-get-order) |
 | `company_id` | UUID | The OlaClick company |
-| `country_code` | UUID | Company country code |
+| `country_code` | string | Company country code (e.g. `BR`, `MX`, `CO`) |
 
 :::info
-The webhook only sends the order reference. To get the full order data (products, totals, etc.), use the [`GET /v1/orders/:id`](/modules/fiscal-notes/emission/get-order) endpoint.
+The webhook only sends the order reference. To get the full order data (products, totals, etc.), use the [`GET /v1/orders/:id`](https://developers.olaclick.app/docs/api/orders-controller-get-order) endpoint.
 :::
 
 ## Expected Response
@@ -135,12 +138,15 @@ app.post('/webhooks/olaclick', async (req, res) => {
 
   const { invoice_id, order_id, company_id, country_code } = req.body;
 
-  // 2. Fetch full order data
+  // 2. Get access token for this company
+  const token = await getAccessToken(company_id);
+
+  // 3. Fetch full order data
   const order = await fetch(`https://public-api.olaclick.app/v1/orders/${order_id}`, {
-    headers: { 'Authorization': `Bearer ${accessToken}` }
+    headers: { 'Authorization': `Bearer ${token}` }
   }).then(r => r.json());
 
-  // 3. Process and emit invoice
+  // 4. Process and emit invoice
   await processInvoice(invoice_id, order, company_id, country_code);
 
   res.json({ status: 'received', provider_reference: invoice_id });

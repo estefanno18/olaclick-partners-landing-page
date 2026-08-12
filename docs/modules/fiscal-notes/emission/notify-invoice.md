@@ -9,15 +9,19 @@ After you emit an invoice, notify OlaClick with the invoice data.
 
 ## Endpoint
 
+> **Endpoint:** `POST /v1/fiscal-notes/invoices/{invoice_id}`
+
 ```http
 POST https://public-api.olaclick.app/v1/fiscal-notes/invoices/{invoice_id}
-Authorization: Bearer {api_key}
+Authorization: Bearer {access_token}
 Content-Type: application/json
 ```
 
-**Scope required:** `fiscal_notes:write`
+**Scope required:** `fiscal-notes:write`
 
 The `invoice_id` is the same one you received in the [order webhook](/modules/fiscal-notes/emission/receive-orders).
+
+See the [Authentication section in the API Reference](https://developers.olaclick.app/docs/api) to learn how to obtain an access token.
 
 ## Request Body — Invoice Issued
 
@@ -26,11 +30,11 @@ The `invoice_id` is the same one you received in the [order webhook](/modules/fi
   "status": "issued",
   "provider_invoice_id": "nf_789012",
   "invoice_number": "NF-e 000.123.456",
-  "invoice_url": "https://provider.com/invoices/nf_789012/pdf",
+  "invoice_url": "https://connector.com/invoices/nf_789012/pdf",
   "issued_at": "2025-05-11T15:05:00.000Z",
   "invoice_data": {
     "access_key": "35250511234567890001901550010000001231234567890",
-    "xml_url": "https://provider.com/invoices/nf_789012/xml",
+    "xml_url": "https://connector.com/invoices/nf_789012/xml",
     "total_taxes": 0
   }
 }
@@ -52,14 +56,14 @@ If you cannot emit the invoice, notify with `status: "error"`:
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `status` | string | ✅ | `issued` or `error` |
-| `provider_invoice_id` | string | ❌ | Your internal invoice ID |
-| `invoice_number` | string | ❌ | Invoice number |
-| `invoice_url` | string | ❌ | URL to download the PDF |
-| `issued_at` | ISO 8601 | ❌ | Emission date (required if `issued`) |
-| `invoice_data` | object | ❌ | Additional data (access key, XML URL, taxes) |
-| `error_code` | string | ❌ | Error code (required if `error`) |
-| `error_message` | string | ❌ | Error description |
+| `status` | string | Yes | `issued` or `error` |
+| `provider_invoice_id` | string | No | Your internal invoice ID |
+| `invoice_number` | string | No | Invoice number |
+| `invoice_url` | string | No | URL to download the PDF |
+| `issued_at` | ISO 8601 | No | Emission date (required if `issued`) |
+| `invoice_data` | object | No | Additional data (access key, XML URL, taxes) |
+| `error_code` | string | No | Error code (required if `error`) |
+| `error_message` | string | No | Error description |
 
 ## Responses
 
@@ -83,7 +87,7 @@ If you cannot emit the invoice, notify with `status: "error"`:
 {
   "statusCode": 404,
   "error": "INVOICE_NOT_FOUND",
-  "message": "The invoice_id does not exist or does not belong to this application"
+  "message": "The invoice_id does not exist or does not belong to this connector"
 }
 ```
 
@@ -99,11 +103,13 @@ If you cannot emit the invoice, notify with `status: "error"`:
 
 ## Cancel an Invoice
 
+> **Endpoint:** `POST /v1/fiscal-notes/invoices/{invoice_id}/cancel`
+
 If an invoice needs to be cancelled after being issued:
 
 ```http
 POST https://public-api.olaclick.app/v1/fiscal-notes/invoices/{invoice_id}/cancel
-Authorization: Bearer {api_key}
+Authorization: Bearer {access_token}
 Content-Type: application/json
 ```
 
