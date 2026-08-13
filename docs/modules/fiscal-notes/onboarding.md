@@ -5,7 +5,7 @@ title: Onboarding
 
 # Fiscal Notes — Onboarding
 
-This guide describes the integration flow for the **Fiscal Notes** module. Before starting, make sure you have completed the [Connector registration](/) and understand the [Authentication](https://developers.olaclick-stg.click/docs/hub/getting-started#step-2-request-a-token) flow.
+This guide describes the integration flow for the **Fiscal Notes** module. Before starting, make sure you have completed the [Connector registration](/) and understand the [Authentication](https://developers.olaclick.app/docs/hub/getting-started#step-2-request-a-token) flow.
 
 ## Flow Overview
 
@@ -111,7 +111,7 @@ Use the `order_id` from the webhook to fetch the full order details (products, p
 
 → See [Get Order](/modules/fiscal-notes/emission/get-order)
 
-> **API Reference:** [`GET /v1/orders/:id`](https://developers.olaclick-stg.click/docs/api/orders-controller-get-order) — Get an order
+> **API Reference:** [`GET /v1/orders/:id`](https://developers.olaclick.app/docs/api/orders-controller-get-order) — Get an order
 
 ### 5. Emit and notify invoice
 

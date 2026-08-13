@@ -21,4 +21,4 @@ Key concepts used throughout this documentation.
 
 ## API Reference
 
-The full API reference is available at [developers.olaclick-stg.click](https://developers.olaclick-stg.click/docs/).
+The full API reference is available at [developers.olaclick.app](https://developers.olaclick.app/docs/).

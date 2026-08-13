@@ -21,7 +21,7 @@ Content-Type: application/json
 
 The `invoice_id` is the same one you received in the [order webhook](/modules/fiscal-notes/emission/receive-orders).
 
-See the [Authentication section in the API Reference](https://developers.olaclick-stg.click/docs/api) to learn how to obtain an access token.
+See the [Authentication section in the API Reference](https://developers.olaclick.app/docs/api) to learn how to obtain an access token.
 
 ## Request Body — Invoice Issued
 

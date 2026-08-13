@@ -15,4 +15,4 @@ This endpoint requires your **connector token** (not a company-scoped token). Au
 
 Once you validate (or reject) the company's documents, call this endpoint to transition the connection status.
 
-> **API Reference:** [Update Connection Status](https://developers.olaclick-stg.click/docs/api/public-conections-controller-update-status)
+> **API Reference:** [Update Connection Status](https://developers.olaclick.app/docs/api/public-conections-controller-update-status)

@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'OlaClick Connectors',
   tagline: 'Integration documentation for OlaClick connectors',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/favicon.png',
 
   future: {
     v4: true,
@@ -56,6 +56,7 @@ const config: Config = {
       logo: {
         alt: 'OlaClick Logo',
         src: 'img/logo.svg',
+        srcDark: 'img/logo-dark.svg',
       },
       items: [
         {
