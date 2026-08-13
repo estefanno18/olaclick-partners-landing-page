@@ -82,7 +82,7 @@ const config: Config = {
             },
             {
               label: 'API Reference',
-              href: 'https://developers.olaclick.app/docs/api',
+              href: 'https://developers.olaclick-stg.click/docs/api',
             },
           ],
         },

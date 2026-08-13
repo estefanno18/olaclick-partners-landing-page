@@ -103,7 +103,7 @@ Each connection is unique per company. Never mix data between companies.
 
 ## 3. Authenticate with the API
 
-Use the OAuth 2.0 client credentials flow to obtain an access token scoped to a specific company. See the [Authentication section in the API Reference](https://developers.olaclick.app/docs/api) for full details on how to obtain and use tokens.
+Use the OAuth 2.0 client credentials flow to obtain an access token scoped to a specific company. See the [Authentication section in the API Reference](https://developers.olaclick-stg.click/docs/hub/getting-started#step-2-request-a-token) for full details on how to obtain and use tokens.
 
 ## 4. Complete homologation
 

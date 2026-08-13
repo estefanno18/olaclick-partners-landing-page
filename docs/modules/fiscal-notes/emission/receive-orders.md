@@ -28,7 +28,7 @@ X-OlaClick-Request-Id: {uuid}
 X-OlaClick-Timestamp: {iso8601}
 ```
 
-> **Related:** [Webhooks](https://developers.olaclick.app/docs/webhooks) — General webhooks documentation in the Public API
+> **Related:** [Webhooks](https://developers.olaclick-stg.click/docs/webhooks) — General webhooks documentation in the Public API
 
 ## Request Body
 
@@ -52,12 +52,12 @@ The body contains the order reference and metadata needed to fetch the full orde
 | `event_type` | string | Always `fiscal_notes.request` |
 | `event_id` | UUID | Unique ID for this event delivery |
 | `invoice_id` | UUID | Unique ID for this invoice request (use for idempotency and when [notifying the result](/modules/fiscal-notes/emission/notify-invoice)) |
-| `order_id` | UUID | The order ID — use this to fetch the full order via [`GET /v1/orders/:id`](https://developers.olaclick.app/docs/api/orders-controller-get-order) |
+| `order_id` | UUID | The order ID — use this to fetch the full order via [`GET /v1/orders/:id`](https://developers.olaclick-stg.click/docs/api/orders-controller-get-order) |
 | `company_id` | UUID | The OlaClick company |
 | `country_code` | string | Company country code (e.g. `BR`, `MX`, `CO`) |
 
 :::info
-The webhook only sends the order reference. To get the full order data (products, totals, etc.), use the [`GET /v1/orders/:id`](https://developers.olaclick.app/docs/api/orders-controller-get-order) endpoint.
+The webhook only sends the order reference. To get the full order data (products, totals, etc.), use the [`GET /v1/orders/:id`](https://developers.olaclick-stg.click/docs/api/orders-controller-get-order) endpoint.
 :::
 
 ## Expected Response

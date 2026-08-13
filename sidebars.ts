@@ -29,7 +29,6 @@ const sidebars: SidebarsConfig = {
         'modules/fiscal-notes/homologation',
       ],
     },
-    'error-codes',
   ],
 };
 

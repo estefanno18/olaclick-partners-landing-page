@@ -34,7 +34,7 @@ We recommend sending screenshots or a staging link of the iframe before scheduli
 
 The connector must demonstrate that it can:
 
-- Obtain an `access_token` using the [`POST /v1/oauth/token`](https://developers.olaclick.app/docs/api) endpoint with its credentials (`client_id` and `client_secret`)
+- Obtain an `access_token` using the [`POST /v1/oauth/token`](https://developers.olaclick-stg.click/docs/api) endpoint with its credentials (`client_id` and `client_secret`)
 - Correctly handle token expiration and renew it before it expires
 - Include the token in the `Authorization: Bearer {token}` header in all requests
 
@@ -57,7 +57,7 @@ The connector must demonstrate that it can:
 
 - Receive order notifications on their webhook endpoint and respond with `200 OK`
 - Verify the `X-OlaClick-Signature` header
-- Fetch the full order data using [`GET /v1/orders/{order_id}`](https://developers.olaclick.app/docs/api/orders-controller-get-order)
+- Fetch the full order data using [`GET /v1/orders/{order_id}`](https://developers.olaclick-stg.click/docs/api/orders-controller-get-order)
 - Call [`POST /v1/fiscal-notes/invoices/{id}`](/modules/fiscal-notes/emission/notify-invoice) with `status: "issued"` when the invoice is emitted
 - Call [`POST /v1/fiscal-notes/invoices/{id}`](/modules/fiscal-notes/emission/notify-invoice) with `status: "error"` when emission fails
 - Handle idempotency (same `invoice_id` received twice should not produce duplicate invoices)
