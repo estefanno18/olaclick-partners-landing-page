@@ -40,7 +40,6 @@ The body follows the standard OlaClick webhook event format:
   "merchant_id": "restaurant_042",
   "timestamp": "2026-06-20T15:30:00.000Z",
   "data": {
-    "invoice_id": "b23dc10b-77aa-4372-a567-0e02b2c3d999",
     "order_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
     "company_id": "550e8400-e29b-41d4-a716-446655440000",
     "country_code": "BR"
