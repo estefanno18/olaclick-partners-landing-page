@@ -23,41 +23,51 @@ OlaClick makes a POST request to the webhook URL registered for this company whe
 ```http
 POST {your_webhook_url}
 Content-Type: application/json
+source: OlaClick
 X-OlaClick-Signature: sha256={hmac_signature}
-X-OlaClick-Request-Id: {uuid}
-X-OlaClick-Timestamp: {iso8601}
 ```
 
 > **Related:** [Webhooks](https://developers.olaclick.app/docs/webhooks) — General webhooks documentation in the Public API
 
 ## Request Body
 
-The body contains the order reference and metadata needed to fetch the full order:
+The body follows the standard OlaClick webhook event format:
 
 ```json
 {
   "event_type": "fiscal_notes.request",
   "event_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-  "invoice_id": "b23dc10b-77aa-4372-a567-0e02b2c3d999",
-  "order_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-  "company_id": "550e8400-e29b-41d4-a716-446655440000",
-  "country_code": "BR"
+  "merchant_id": "restaurant_042",
+  "timestamp": "2026-06-20T15:30:00.000Z",
+  "data": {
+    "invoice_id": "b23dc10b-77aa-4372-a567-0e02b2c3d999",
+    "order_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "company_id": "550e8400-e29b-41d4-a716-446655440000",
+    "country_code": "BR"
+  }
 }
 ```
 
-### Fields
+### Envelope fields
 
 | Field | Type | Description |
 |-------|------|-------------|
 | `event_type` | string | Always `fiscal_notes.request` |
-| `event_id` | UUID | Unique ID for this event delivery |
-| `invoice_id` | UUID | Unique ID for this invoice request (use for idempotency and when [notifying the result](/modules/fiscal-notes/emission/notify-invoice)) |
-| `order_id` | UUID | The order ID — use this to fetch the full order via [`GET /v1/orders/:id`](https://developers.olaclick.app/docs/api/orders-controller-get-order) |
-| `company_id` | UUID | The OlaClick company |
-| `country_code` | string | Company country code (e.g. `BR`, `MX`, `CO`) |
+| `event_id` | UUID | Unique ID for this event delivery (use for idempotency) |
+| `merchant_id` | string | The merchant identifier configured in the webhook |
+| `timestamp` | ISO 8601 | When the event was produced |
+
+### Data fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `data.invoice_id` | UUID | Unique ID for this invoice request (use when [notifying the result](/modules/fiscal-notes/emission/notify-invoice)) |
+| `data.order_id` | UUID | The order ID — use this to fetch the full order via [`GET /v1/orders/:id`](https://developers.olaclick.app/docs/api/orders-controller-get-order) |
+| `data.company_id` | UUID | The OlaClick company |
+| `data.country_code` | string | Company country code (e.g. `BR`, `MX`, `CO`) |
 
 :::info
-The webhook only sends the order reference. To get the full order data (products, totals, etc.), use the [`GET /v1/orders/:id`](https://developers.olaclick.app/docs/api/orders-controller-get-order) endpoint.
+The webhook only sends the order reference inside `data`. To get the full order data (products, totals, etc.), use the [`GET /v1/orders/:id`](https://developers.olaclick.app/docs/api/orders-controller-get-order) endpoint with `data.order_id`.
 :::
 
 ## Expected Response
@@ -83,19 +93,19 @@ If you cannot process the request, respond with an appropriate error:
 
 ## Signature Verification
 
-The `X-OlaClick-Signature` header contains an HMAC-SHA256 of the request body using your `client_secret`:
+The `X-OlaClick-Signature` header contains an HMAC-SHA256 of the raw request body using your `client_secret`:
 
 ```
-X-OlaClick-Signature: sha256=<hex(HMAC-SHA256(client_secret, request_body))>
+X-OlaClick-Signature: sha256=<hex(HMAC-SHA256(client_secret, raw_request_body))>
 ```
 
 ```javascript
 const crypto = require('crypto');
 
-function verifySignature(body, signature, clientSecret) {
+function verifySignature(rawBody, signature, clientSecret) {
   const expected = 'sha256=' + crypto
     .createHmac('sha256', clientSecret)
-    .update(JSON.stringify(body))
+    .update(rawBody)
     .digest('hex');
 
   return crypto.timingSafeEqual(
@@ -104,6 +114,8 @@ function verifySignature(body, signature, clientSecret) {
   );
 }
 ```
+
+> **Important:** Always use the raw request body string, not a re-serialized version of the parsed JSON.
 
 ## Retries
 
@@ -119,7 +131,7 @@ If OlaClick does not receive a 2xx response, it retries with exponential backoff
 After 4 failed attempts, the invoice is marked as `failed`.
 
 :::tip
-Implement idempotency using the `invoice_id`. If you receive the same `invoice_id` more than once, do not issue a duplicate invoice.
+Implement idempotency using `event_id` (for deduplication) and `data.invoice_id` (to avoid duplicate invoices).
 :::
 
 ## Timeout
@@ -136,7 +148,8 @@ app.post('/webhooks/olaclick', async (req, res) => {
     return res.status(401).json({ status: 'error', error_code: 'INVALID_SIGNATURE' });
   }
 
-  const { invoice_id, order_id, company_id, country_code } = req.body;
+  const { event_id, data } = req.body;
+  const { invoice_id, order_id, company_id, country_code } = data;
 
   // 2. Get access token for this company
   const token = await getAccessToken(company_id);
