@@ -5,50 +5,62 @@ title: Notify Invoice
 
 # Notify Invoice
 
-After you emit an invoice, notify OlaClick with the invoice data.
+After you emit (or fail to emit) an invoice, notify OlaClick with the result so the order's electronic invoice record is updated.
 
 ## Endpoint
 
-> **Endpoint:** `POST /v1/fiscal-notes/invoices/{invoice_id}`
+> **Endpoint:** `PATCH /v1/companies/{company_id}/electronic-invoices/confirmation`
 
 ```http
-POST https://public-api.olaclick.app/v1/fiscal-notes/invoices/{invoice_id}
+PATCH https://public-api.olaclick.app/v1/companies/{company_id}/electronic-invoices/confirmation
 Authorization: Bearer {access_token}
 Content-Type: application/json
 ```
 
 **Scope required:** `fiscal-notes:write`
 
-The `invoice_id` is the same one you received in the [order webhook](/modules/fiscal-notes/emission/receive-orders).
+The `company_id` is the same one you received in `data.company_id` from the [order webhook](/modules/fiscal-notes/emission/receive-orders).
 
 See the [Authentication section in the API Reference](https://developers.olaclick.app/docs/api) to learn how to obtain an access token.
 
 ## Request Body — Invoice Issued
 
+When the invoice was successfully emitted, send `status: "COMPLETED"`:
+
 ```json
 {
-  "status": "issued",
-  "provider_invoice_id": "nf_789012",
-  "invoice_number": "NF-e 000.123.456",
-  "invoice_url": "https://connector.com/invoices/nf_789012/pdf",
-  "issued_at": "2025-05-11T15:05:00.000Z",
-  "invoice_data": {
-    "access_key": "35250511234567890001901550010000001231234567890",
-    "xml_url": "https://connector.com/invoices/nf_789012/xml",
-    "total_taxes": 0
+  "order_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "status": "COMPLETED",
+  "message": "Invoice issued successfully",
+  "invoice_number": "FE5398",
+  "print_data": {
+    "qr_code_text": "https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey=25ca4186...",
+    "cufe": "25ca418613d57642a99e77399321a846...",
+    "validation_date": "2025-11-29",
+    "validation_time": "10:53:43-05:00",
+    "issue_date": "2026-01-03",
+    "issue_time": "16:58:25-05:00",
+    "resolution_text": "Resolución DIAN Nº 18764104014926 del 30/12/2025...",
+    "electronic_signature": "WG8U3sSLlArTYPygzMZwmMcVm96rhFE06LURPd/Xl2..."
+  },
+  "xml_json": {
+    "Invoice": {
+      "cbc:ID": "FE5398",
+      "cbc:IssueDate": "2026-01-03"
+    }
   }
 }
 ```
 
-## Request Body — Error
+## Request Body — Error / Cancelled
 
-If you cannot emit the invoice, notify with `status: "error"`:
+If you cannot emit the invoice, send `status: "CANCELLED"`:
 
 ```json
 {
-  "status": "error",
-  "error_code": "INVALID_CUSTOMER_DOCUMENT",
-  "error_message": "The customer CPF is invalid"
+  "order_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "status": "CANCELLED",
+  "message": "The customer CPF is invalid"
 }
 ```
 
@@ -56,79 +68,42 @@ If you cannot emit the invoice, notify with `status: "error"`:
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `status` | string | Yes | `issued` or `error` |
-| `provider_invoice_id` | string | No | Your internal invoice ID |
-| `invoice_number` | string | No | Invoice number |
-| `invoice_url` | string | No | URL to download the PDF |
-| `issued_at` | ISO 8601 | No | Emission date (required if `issued`) |
-| `invoice_data` | object | No | Additional data (access key, XML URL, taxes) |
-| `error_code` | string | No | Error code (required if `error`) |
-| `error_message` | string | No | Error description |
+| `order_id` | UUID | Yes | The order ID from the webhook `data.order_id` |
+| `status` | string | Yes | `COMPLETED` or `CANCELLED` |
+| `message` | string | No | Human-readable description of the result |
+| `invoice_number` | string | No | Invoice number (max 255 chars) |
+| `print_data` | object | No | Normalized data for printing (QR, CUFE, dates, signatures) |
+| `xml_json` | object | No | Parsed XML structure of the electronic invoice |
+
+:::warning
+Only `COMPLETED` and `CANCELLED` are accepted. Sending `PENDING` or any other value returns `422 Unprocessable Entity`.
+:::
 
 ## Responses
 
-### 200 OK — Invoice registered
+### 200 OK — Confirmation processed
 
 ```json
 {
-  "statusCode": 200,
-  "message": "Invoice registered successfully",
-  "data": {
-    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-    "status": "issued",
-    "registered_at": "2025-05-11T15:05:30.000Z"
-  }
+  "message": "Electronic invoice confirmation successfully processed"
 }
 ```
 
-### 404 Not Found — Invoice ID not found
+### 404 Not Found — Order or invoice not found
 
 ```json
 {
-  "statusCode": 404,
-  "error": "INVOICE_NOT_FOUND",
-  "message": "The invoice_id does not exist or does not belong to this connector"
+  "message": "Electronic invoice not found for the given order and company"
 }
 ```
 
-### 409 Conflict — Already notified
+### 422 Unprocessable Entity — Validation error
 
 ```json
 {
-  "statusCode": 409,
-  "error": "INVOICE_ALREADY_NOTIFIED",
-  "message": "An invoice has already been registered for this invoice_id"
-}
-```
-
-## Cancel an Invoice
-
-> **Endpoint:** `POST /v1/fiscal-notes/invoices/{invoice_id}/cancel`
-
-If an invoice needs to be cancelled after being issued:
-
-```http
-POST https://public-api.olaclick.app/v1/fiscal-notes/invoices/{invoice_id}/cancel
-Authorization: Bearer {access_token}
-Content-Type: application/json
-```
-
-```json
-{
-  "reason": "Order cancelled by customer",
-  "cancelled_at": "2025-05-11T16:00:00.000Z"
-}
-```
-
-**Response:** `200 OK`
-
-```json
-{
-  "statusCode": 200,
-  "message": "Invoice cancelled successfully",
-  "data": {
-    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-    "status": "cancelled"
+  "message": "The selected status is invalid.",
+  "errors": {
+    "status": ["The selected status is invalid."]
   }
 }
 ```

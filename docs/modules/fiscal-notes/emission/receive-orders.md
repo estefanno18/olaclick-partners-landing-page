@@ -35,14 +35,15 @@ The body follows the standard OlaClick webhook event format:
 
 ```json
 {
-  "event_type": "fiscal_notes.request",
+  "event_type": "FISCAL_NOTES_REQUEST",
   "event_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
   "merchant_id": "restaurant_042",
   "timestamp": "2026-06-20T15:30:00.000Z",
   "data": {
-    "order_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
     "company_id": "550e8400-e29b-41d4-a716-446655440000",
-    "country_code": "BR"
+    "order_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "country_code": "BR",
+    "electronic_invoice_id": 1
   }
 }
 ```
@@ -51,7 +52,7 @@ The body follows the standard OlaClick webhook event format:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `event_type` | string | Always `fiscal_notes.request` |
+| `event_type` | string | Always `FISCAL_NOTES_REQUEST` |
 | `event_id` | UUID | Unique ID for this event delivery (use for idempotency) |
 | `merchant_id` | string | The merchant identifier configured in the webhook |
 | `timestamp` | ISO 8601 | When the event was produced |
@@ -60,10 +61,10 @@ The body follows the standard OlaClick webhook event format:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `data.invoice_id` | UUID | Unique ID for this invoice request (use when [notifying the result](/modules/fiscal-notes/emission/notify-invoice)) |
-| `data.order_id` | UUID | The order ID — use this to fetch the full order via [`GET /v1/orders/:id`](https://developers.olaclick.app/docs/api/orders-controller-get-order) |
 | `data.company_id` | UUID | The OlaClick company |
+| `data.order_id` | UUID | The order ID — use this to fetch the full order via [`GET /v1/orders/:id`](https://developers.olaclick.app/docs/api/orders-controller-get-order) |
 | `data.country_code` | string | Company country code (e.g. `BR`, `MX`, `CO`) |
+| `data.electronic_invoice_id` | number | Internal electronic invoice ID |
 
 :::info
 The webhook only sends the order reference inside `data`. To get the full order data (products, totals, etc.), use the [`GET /v1/orders/:id`](https://developers.olaclick.app/docs/api/orders-controller-get-order) endpoint with `data.order_id`.
@@ -130,7 +131,7 @@ If OlaClick does not receive a 2xx response, it retries with exponential backoff
 After 4 failed attempts, the invoice is marked as `failed`.
 
 :::tip
-Implement idempotency using `event_id` (for deduplication) and `data.invoice_id` (to avoid duplicate invoices).
+Implement idempotency using `event_id` to deduplicate webhook deliveries.
 :::
 
 ## Timeout
@@ -148,7 +149,7 @@ app.post('/webhooks/olaclick', async (req, res) => {
   }
 
   const { event_id, data } = req.body;
-  const { invoice_id, order_id, company_id, country_code } = data;
+  const { order_id, company_id, country_code, electronic_invoice_id } = data;
 
   // 2. Get access token for this company
   const token = await getAccessToken(company_id);
@@ -159,8 +160,8 @@ app.post('/webhooks/olaclick', async (req, res) => {
   }).then(r => r.json());
 
   // 4. Process and emit invoice
-  await processInvoice(invoice_id, order, company_id, country_code);
+  await processInvoice(order_id, order, company_id, country_code);
 
-  res.json({ status: 'received', provider_reference: invoice_id });
+  res.json({ status: 'received', provider_reference: order_id });
 });
 ```
