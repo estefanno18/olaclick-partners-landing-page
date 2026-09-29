@@ -5,7 +5,7 @@ title: Confirm Cancellation
 
 # Confirm Cancellation
 
-After you cancel (or fail to cancel) a fiscal document, notify OlaClick with the result so the order's electronic invoice record is updated and leaves the transient `CANCELLING` state.
+After you cancel (or fail to cancel) a fiscal document, notify OlaClick with the result so the order's electronic invoice record is updated and leaves the transient `PENDING` state.
 
 This uses the same confirmation endpoint as invoice emission — send `status` as `CANCELLED` when the cancellation succeeded, or `CANCELLED_ERROR` when it failed, together with a `message` describing the outcome.
 

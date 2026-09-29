@@ -148,7 +148,7 @@ After cancelling the fiscal document, notify OlaClick with the result using the 
 > **Endpoint:** [`PATCH /v1/fiscal-notes/confirmation`](https://developers.olaclick.app/docs/api/fiscal-notes-controller-confirm)
 
 :::warning
-If you do not confirm the cancellation, the invoice stays in the transient `CANCELLING` status. Always confirm after processing a cancellation webhook, whether it succeeded or failed.
+If you do not confirm the cancellation, the invoice stays in the transient `PENDING` status. Always confirm after processing a cancellation webhook, whether it succeeded or failed.
 :::
 
 ## Homologation
