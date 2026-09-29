@@ -38,6 +38,14 @@ sequenceDiagram
     Connector->>Connector: Issues invoice
     Connector->>OlaClick: POST /v1/fiscal-notes/invoices/{id}
     OlaClick-->>Connector: 200 OK
+
+    Note over Company,Connector: 4. Cancellation Phase
+
+    Company->>OlaClick: Cancels a completed invoice
+    OlaClick->>Connector: POST {webhook_url} — FISCAL_NOTES_CANCELATION_REQUEST event
+    Connector->>Connector: Cancels invoice with fiscal authority
+    Connector->>OlaClick: PATCH /v1/fiscal-notes/confirmation (status: CANCELLED)
+    OlaClick-->>Connector: 200 OK
 ```
 
 ## Phase 1: Activation & Binding
@@ -120,6 +128,28 @@ After emitting the invoice, send the result back to OlaClick (status: `issued` o
 → See [Notify Invoice](/modules/fiscal-notes/emission/notify-invoice)
 
 > **Endpoint:** `POST /v1/fiscal-notes/invoices/{invoice_id}`
+
+## Phase 4: Cancellation
+
+When a company cancels a previously issued invoice, OlaClick sends a cancellation event to your webhook so you can cancel the fiscal document with the fiscal authority. This is the mirror of the emission flow.
+
+### 6. Receive cancellation notifications
+
+OlaClick sends a POST to your webhook URL with the `FISCAL_NOTES_CANCELATION_REQUEST` event when a company cancels a completed invoice. The payload uses the same envelope as the emission event — only the `event_type` differs — so route on `event_type` in your existing webhook handler.
+
+→ See [Receive Cancellation](/modules/fiscal-notes/cancellation/receive-cancellation)
+
+### 7. Confirm the cancellation
+
+After cancelling the fiscal document, notify OlaClick with the result using the same confirmation endpoint as emission, sending `status: CANCELLED` (or `CANCELLED_ERROR` if it failed) plus a `message`.
+
+→ See [Confirm Cancellation](/modules/fiscal-notes/cancellation/confirm-cancellation)
+
+> **Endpoint:** [`PATCH /v1/fiscal-notes/confirmation`](https://developers.olaclick.app/docs/api/fiscal-notes-controller-confirm)
+
+:::warning
+If you do not confirm the cancellation, the invoice stays in the transient `CANCELLING` status. Always confirm after processing a cancellation webhook, whether it succeeded or failed.
+:::
 
 ## Homologation
 

@@ -26,6 +26,14 @@ const sidebars: SidebarsConfig = {
             'modules/fiscal-notes/emission/notify-invoice',
           ],
         },
+        {
+          type: 'category',
+          label: 'Cancellation Phase',
+          items: [
+            'modules/fiscal-notes/cancellation/receive-cancellation',
+            'modules/fiscal-notes/cancellation/confirm-cancellation',
+          ],
+        },
         'modules/fiscal-notes/homologation',
       ],
     },
